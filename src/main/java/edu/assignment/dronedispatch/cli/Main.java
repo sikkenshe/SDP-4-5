@@ -77,7 +77,7 @@ public final class Main {
   }
  }
 
- private static void runDispatch(Scanner in, DroneDispatchFacade facade, FaieMode mode) {
+ private static void runDispatch(Scanner in, DroneDispatchFacade facade, FailureMode mode) {
   System.out.print("Destination (use 'storm' for weather failure or 'closedpad' for landing failure): ");
   String destination = in.nextLine();
   System.out.print("Payload kg (0.1-5.0): ");
