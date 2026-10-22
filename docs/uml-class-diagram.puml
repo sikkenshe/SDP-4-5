@@ -1,0 +1,71 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+class Main
+class DroneDispatchFacade
+class DispatchAdminFacade
+class DatabaseManager
+class DispatchProcessRepository
+package "Standalone subsystem demos" {
+  class RouteSubsystemDemo
+  class DroneSubsystemDemo
+  class DeliverySubsystemDemo
+}
+
+package "Subsystem A — Route planning" {
+  class RoutePlan
+  class RoutePlanner
+  class WeatherChecker
+  class RouteRepository
+}
+package "Subsystem B — Drone preparation" {
+  class DroneReservation
+  class BatteryManager
+  class PayloadSensor
+  class DroneRepository
+}
+package "Subsystem C — Delivery finalization" {
+  class DeliveryRecord
+  class LandingPadController
+  class DeliveryConfirmation
+  class DeliveryRepository
+}
+
+Main --> DroneDispatchFacade : common client workflow
+Main --> DispatchAdminFacade : inspection / recovery
+DroneDispatchFacade --> RoutePlanner
+DroneDispatchFacade --> WeatherChecker
+DroneDispatchFacade --> RouteRepository
+DroneDispatchFacade --> BatteryManager
+DroneDispatchFacade --> PayloadSensor
+DroneDispatchFacade --> DroneRepository
+DroneDispatchFacade --> LandingPadController
+DroneDispatchFacade --> DeliveryConfirmation
+DroneDispatchFacade --> DeliveryRepository
+DroneDispatchFacade --> DispatchProcessRepository
+DispatchAdminFacade --> DispatchProcessRepository
+DispatchAdminFacade --> DroneDispatchFacade : manual compensation / recovery
+RouteRepository --> DatabaseManager
+DroneRepository --> DatabaseManager
+DeliveryRepository --> DatabaseManager
+DispatchProcessRepository --> DatabaseManager
+RoutePlanner ..> RoutePlan
+RouteSubsystemDemo ..> RoutePlanner
+RouteSubsystemDemo ..> RouteRepository
+BatteryManager ..> DroneReservation
+DroneSubsystemDemo ..> BatteryManager
+DroneSubsystemDemo ..> PayloadSensor
+DroneSubsystemDemo ..> DroneRepository
+DeliveryConfirmation ..> DeliveryRecord
+DeliverySubsystemDemo ..> LandingPadController
+DeliverySubsystemDemo ..> DeliveryConfirmation
+DeliverySubsystemDemo ..> DeliveryRepository
+
+note bottom of DroneDispatchFacade
+  Orchestrates A -> B -> C
+  B failure: compensate A
+  C failure: compensate B, then A
+  Progress is read from SQLite after restart
+end note
+@enduml

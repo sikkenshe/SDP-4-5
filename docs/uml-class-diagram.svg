@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050" role="img" aria-labelledby="title desc">
+  <title id="title">Delivery Drone Dispatch — Facade class diagram</title>
+  <desc id="desc">Client Main calls common and administrative facades. The common facade orchestrates three independent subsystems A, B, and C. Each subsystem has business logic, an entity, a status enum, and a SQLite repository. Repositories and workflow progress repository use DatabaseManager.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#374151"/></marker>
+    <style>
+      .bg{fill:#fff}.head{font:700 25px Arial,sans-serif;fill:#111827}.subhead{font:700 19px Arial,sans-serif;fill:#111827}.body{font:16px Arial,sans-serif;fill:#1f2937}.small{font:14px Arial,sans-serif;fill:#374151}.pkg{fill:#f8fafc;stroke:#64748b;stroke-width:2}.facade{fill:#eff6ff;stroke:#2563eb;stroke-width:2}.client{fill:#f3f4f6;stroke:#4b5563;stroke-width:2}.store{fill:#ecfdf5;stroke:#059669;stroke-width:2}.line{stroke:#374151;stroke-width:2;fill:none;marker-end:url(#arrow)}.plainline{stroke:#6b7280;stroke-width:1.7;fill:none}.divider{stroke:#cbd5e1;stroke-width:1.3}
+    </style>
+  </defs>
+  <rect class="bg" width="1500" height="1050"/>
+  <text x="750" y="38" text-anchor="middle" class="head">Delivery Drone Dispatch — Facade Pattern</text>
+  <rect x="585" y="65" width="330" height="70" rx="8" class="client"/>
+  <text x="750" y="94" text-anchor="middle" class="subhead">Client</text><text x="750" y="117" text-anchor="middle" class="body">Main (console menu)</text>
+
+  <rect x="240" y="175" width="440" height="95" rx="8" class="facade"/>
+  <text x="460" y="205" text-anchor="middle" class="subhead">DroneDispatchFacade</text>
+  <text x="460" y="230" text-anchor="middle" class="body">dispatch(): A → B → C</text>
+  <text x="460" y="251" text-anchor="middle" class="small">Persists progress; compensates failures</text>
+  <rect x="820" y="175" width="440" height="95" rx="8" class="facade"/>
+  <text x="1040" y="205" text-anchor="middle" class="subhead">DispatchAdminFacade</text>
+  <text x="1040" y="230" text-anchor="middle" class="body">inspectAll() · compensate() · recover()</text>
+  <text x="1040" y="251" text-anchor="middle" class="small">Inspection and manual / restart recovery</text>
+  <path d="M700 135 L460 175" class="line"/><path d="M800 135 L1040 175" class="line"/>
+  <path d="M820 220 L680 220" class="plainline" stroke-dasharray="6 5"/>
+
+  <rect x="35" y="325" width="445" height="360" rx="8" class="pkg"/>
+  <text x="257" y="357" text-anchor="middle" class="subhead">Subsystem A — Route planning</text>
+  <line x1="55" y1="372" x2="460" y2="372" class="divider"/>
+  <text x="65" y="405" class="body">RoutePlanner</text><text x="65" y="430" class="small">Business rule: plan route and estimate distance</text>
+  <text x="65" y="470" class="body">WeatherChecker</text><text x="65" y="495" class="small">Business rule: reject unsafe weather</text>
+  <text x="65" y="535" class="body">RoutePlan · RouteStatus</text><text x="65" y="560" class="small">Entity owns NEW → PLANNED → CANCELLED</text>
+  <text x="65" y="600" class="body">RouteRepository</text><text x="65" y="625" class="small">SQLite persistence gateway</text>
+  <text x="65" y="660" class="small">Standalone demo: RouteSubsystemDemo</text>
+
+  <rect x="528" y="325" width="445" height="360" rx="8" class="pkg"/>
+  <text x="750" y="357" text-anchor="middle" class="subhead">Subsystem B — Drone preparation</text>
+  <line x1="548" y1="372" x2="953" y2="372" class="divider"/>
+  <text x="558" y="405" class="body">BatteryManager</text><text x="558" y="430" class="small">Business rule: require flight-ready battery</text>
+  <text x="558" y="470" class="body">PayloadSensor</text><text x="558" y="495" class="small">Business rule: enforce payload limit</text>
+  <text x="558" y="535" class="body">DroneReservation · DroneStatus</text><text x="558" y="560" class="small">Entity owns NEW → RESERVED → RELEASED / CANCELLED</text>
+  <text x="558" y="600" class="body">DroneRepository</text><text x="558" y="625" class="small">SQLite persistence gateway</text>
+  <text x="558" y="660" class="small">Standalone demo: DroneSubsystemDemo</text>
+
+  <rect x="1020" y="325" width="445" height="360" rx="8" class="pkg"/>
+  <text x="1242" y="357" text-anchor="middle" class="subhead">Subsystem C — Delivery finalization</text>
+  <line x1="1040" y1="372" x2="1445" y2="372" class="divider"/>
+  <text x="1050" y="405" class="body">LandingPadController</text><text x="1050" y="430" class="small">Business rule: reserve an available landing pad</text>
+  <text x="1050" y="470" class="body">DeliveryConfirmation</text><text x="1050" y="495" class="small">Business rule: create delivery confirmation</text>
+  <text x="1050" y="535" class="body">DeliveryRecord · DeliveryStatus</text><text x="1050" y="560" class="small">Entity owns NEW → CONFIRMED → CANCELLED</text>
+  <text x="1050" y="600" class="body">DeliveryRepository</text><text x="1050" y="625" class="small">SQLite persistence gateway</text>
+  <text x="1050" y="660" class="small">Standalone demo: DeliverySubsystemDemo</text>
+
+  <path d="M460 270 L460 300 L257 300 L257 325" class="line"/>
+  <path d="M460 270 L460 300 L750 300 L750 325" class="line"/>
+  <path d="M460 270 L460 300 L1242 300 L1242 325" class="line"/>
+  <text x="490" y="292" class="small">Facade is the only coordinator across A, B and C</text>
+
+  <rect x="250" y="755" width="470" height="115" rx="8" class="store"/>
+  <text x="485" y="785" text-anchor="middle" class="subhead">DispatchProcessRepository</text>
+  <text x="485" y="810" text-anchor="middle" class="body">Persists STARTED / A_COMPLETED / B_COMPLETED / COMPLETED</text>
+  <text x="485" y="837" text-anchor="middle" class="small">Recovery decides from persisted workflow status and IDs</text>
+  <rect x="825" y="755" width="420" height="115" rx="8" class="store"/>
+  <text x="1035" y="785" text-anchor="middle" class="subhead">DatabaseManager</text>
+  <text x="1035" y="810" text-anchor="middle" class="body">Embedded SQLite file on disk</text>
+  <text x="1035" y="837" text-anchor="middle" class="small">State survives application restart</text>
+  <path d="M460 270 L460 735 L485 735 L485 755" class="line"/>
+  <path d="M1040 270 L1040 710 L485 710 L485 755" class="plainline" stroke-dasharray="6 5"/>
+  <path d="M257 685 L257 720 L1035 720 L1035 755" class="line"/>
+  <path d="M750 685 L750 720 L1035 720" class="line"/>
+  <path d="M1242 685 L1242 720 L1035 720" class="line"/>
+  <text x="750" y="920" text-anchor="middle" class="subhead">Compensation order</text>
+  <text x="750" y="950" text-anchor="middle" class="body">B fails after A commits → compensate A only</text>
+  <text x="750" y="978" text-anchor="middle" class="body">C fails after A and B commit → compensate B, then A</text>
+  <text x="750" y="1020" text-anchor="middle" class="small">Subsystems do not call or import one another; their collaboration is coordinated by the facade.</text>
+</svg>
