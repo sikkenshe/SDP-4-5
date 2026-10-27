@@ -67,6 +67,8 @@ public final class Main {
        System.out.println("Manual compensation completed.");
       }
       case "8" -> runDispatch(in, facade, FailureMode.FAIL_C_AB);
+      case "9" -> WeatherStrategyDemo.run();
+      case "10" -> DroneReadinessDemo.run();
       case "0" -> running = false;
       default -> System.out.println("Unknown option.");
      }
@@ -96,6 +98,8 @@ public final class Main {
   System.out.println("6. Demonstrate invalid input");
   System.out.println("7. Manual compensation by workflow ID");
   System.out.println("8. demonstrate a and b");
+  System.out.println("9. Demonstrate Weather Strategy Pattern");
+  System.out.println("10. Demonstrate Drone Readiness Strategy");
   System.out.println("0. Exit");
   System.out.print("Choose: ");
  }
